@@ -1,8 +1,9 @@
+import React from 'react'
 import { Link } from 'react-router-dom'
 
-import Container from '@mui/material/Container'
-import Button from '@mui/material/Button'
-import Typography from '@mui/material/Typography'
+import Container from '@material-ui/core/Container'
+import Button from '@material-ui/core/Button'
+import Typography from '@material-ui/core/Typography'
 
 import { Constants } from './../scripts/constants'
 
@@ -14,7 +15,7 @@ const NotFoundPage = () => {
       </Typography>
       <div style={{ textAlign: 'center', marginTop: '20px' }}>
         <Link
-          to={Constants.mainConfigs.allPaths.Others.routes.Home.route}
+          to={Constants.mainConfigs.allPaths.routes.Home.route}
           style={{ textDecoration: 'none' }}>
           <Button variant='contained' color='primary'>
             Go To Home Page

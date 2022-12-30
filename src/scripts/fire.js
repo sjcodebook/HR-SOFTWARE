@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import Configs from './configs'
 
 import firebase from 'firebase/app'
@@ -14,11 +12,7 @@ const config = Configs.FirebaseConfig
 let fire
 
 if (!firebase.apps.length) {
-  try {
-    fire = firebase.initializeApp(config)
-  } catch (error) {
-    console.error(error)
-  }
+  fire = firebase.initializeApp(config)
 } else {
   fire = firebase.app() // if already initialized, use that one
 }
@@ -32,5 +26,3 @@ const storage = fire.storage()
 
 export { firebase, firestore, auth, storage }
 export default fire
-
-// Exmaple usage: import fire, {firebase, firestore} from '../scripts/fire';

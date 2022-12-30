@@ -2,15 +2,16 @@ import React, { useEffect } from 'react'
 import { Observer } from 'mobx-react-lite'
 import ScrollToTop from 'react-scroll-up'
 import { ToastContainer } from 'react-toastify'
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
-import { ThemeProvider } from '@mui/material/styles'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward'
+import { ThemeProvider } from '@material-ui/core/styles'
 
 import appStore from './../../store/AppStore'
 
 import Header from './Header'
 import Footer from './Footer'
 
-const Layout = (props: any) => {
+const Layout = (props) => {
   useEffect(() => {
     let darkMode = localStorage.getItem('darkMode')
     if (darkMode) {
@@ -26,6 +27,7 @@ const Layout = (props: any) => {
     <Observer>
       {() => (
         <ThemeProvider theme={appStore.getDarkTheme}>
+          <CssBaseline />
           <Header />
           <br />
           <br />

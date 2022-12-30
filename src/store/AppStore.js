@@ -1,14 +1,15 @@
 import { makeAutoObservable, configure } from 'mobx'
-import { createTheme } from '@mui/material/styles'
+import { createTheme } from '@material-ui/core/styles'
+
 configure({
   enforceActions: 'never',
 })
 
 function AppStore() {
   return makeAutoObservable({
-    darkMode: 'light',
+    darkMode: true,
 
-    setDarkMode(status: 'dark' | 'light') {
+    setDarkMode(status) {
       this.darkMode = status
     },
 
@@ -16,16 +17,16 @@ function AppStore() {
       const palletType = this.darkMode ? 'dark' : 'light'
       return createTheme({
         palette: {
-          mode: palletType,
+          type: palletType,
         },
       })
     },
 
     resetStore() {
-      this.darkMode = 'light'
+      this.darkMode = true
     },
   })
 }
 
-const appStore = new (AppStore as any)()
+const appStore = new AppStore()
 export default appStore

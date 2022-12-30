@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import * as dayjs from 'dayjs'
 
 import { firestore, auth } from './../scripts/fire'
@@ -42,15 +40,10 @@ const createUserIfNotExists = async (currentUser, logoutCallback) => {
         address: '',
         phone: '',
         dob: '',
-        job: '',
-        salary: '',
         picUrl: currentUser.photoURL,
-        isAdmin: false,
         isActive: true,
         lastSeen: dayjs().unix(),
         createdAt: dayjs().unix(),
-        emergencyContactName: '',
-        emergencyContactNumber: '',
         isFirstLogin: true,
       }
     }
@@ -65,16 +58,6 @@ const createUserIfNotExists = async (currentUser, logoutCallback) => {
 }
 
 const loadUser = async (userData) => {
-  let jobConfig = await getJobById(userData?.job || 'notAvailable')
-  jobConfig = jobConfig.exists
-    ? { ...jobConfig.data(), id: jobConfig.id }
-    : {
-        label: '',
-        paths: [],
-        cards: [],
-        actions: [],
-        defaultPath: 'Home',
-      }
   userStore.setCurrentUser(
     userData.uid,
     userData.email,
@@ -82,15 +65,9 @@ const loadUser = async (userData) => {
     userData.address,
     userData.phone,
     userData.dob,
-    jobConfig,
-    userData.jobApproved,
-    userData.salary,
     userData.picUrl,
-    userData.isAdmin,
     userData.lastSeen,
     userData.createdAt,
-    userData.emergencyContactName,
-    userData.emergencyContactNumber,
     userData.isFirstLogin
   )
 }

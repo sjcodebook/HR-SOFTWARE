@@ -1,24 +1,25 @@
+import React from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import { Observer } from 'mobx-react-lite'
-import { makeStyles } from 'tss-react/mui'
-import AppBar from '@mui/material/AppBar'
-import Toolbar from '@mui/material/Toolbar'
-import Typography from '@mui/material/Typography'
-import Button from '@mui/material/Button'
-import Avatar from '@mui/material/Avatar'
-import Brightness4Icon from '@mui/icons-material/Brightness4'
-import NightsStayIcon from '@mui/icons-material/NightsStay'
+import { makeStyles } from '@material-ui/core/styles'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
+import Avatar from '@material-ui/core/Avatar'
+import Brightness4Icon from '@material-ui/icons/Brightness4'
+import NightsStayIcon from '@material-ui/icons/NightsStay'
 
-import MenuDrawer from './MenuDrawer'
+// import MenuDrawer from './MenuDrawer'
 
 import { Constants } from './../../scripts/constants'
 
 import appStore from './../../store/AppStore'
 import userStore from './../../store/UserStore'
 
-// import LogoShort from './../../assets/logo-short.png'
+import LogoShort from './../../assets/logo-short.png'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     position: 'fixed',
@@ -39,8 +40,8 @@ const useStyles = makeStyles()((theme) => ({
   },
 }))
 
-function Header(props: any) {
-  const { classes } = useStyles()
+function Header(props) {
+  const classes = useStyles()
 
   return (
     <Observer>
@@ -61,24 +62,24 @@ function Header(props: any) {
                   justifyContent: 'flex-start',
                   alignItems: 'center',
                 }}>
-                <MenuDrawer userStore={userStore} />
+                {/* <MenuDrawer userStore={userStore} /> */}
                 <Avatar
-                  alt='HR SOFTWARE'
-                  src={'LogoShort'}
+                  alt='Business Manager'
+                  src={LogoShort}
                   className={classes.large}
                   variant='square'
                   style={{ marginRight: '0.2em', cursor: 'pointer' }}
                   onClick={() =>
-                    props.history.push(Constants.mainConfigs.allPaths.Others.routes.Home.route)
+                    props.history.push(Constants.mainConfigs.allPaths.routes.Home.route)
                   }
                 />
                 <Typography
                   variant='h6'
                   className={classes.title}
                   onClick={() =>
-                    props.history.push(Constants.mainConfigs.allPaths.Others.routes.Home.route)
+                    props.history.push(Constants.mainConfigs.allPaths.routes.Home.route)
                   }>
-                  HR SOFTWARE
+                  Business Manager
                 </Typography>
               </div>
               <div
@@ -87,31 +88,29 @@ function Header(props: any) {
                   justifyContent: 'flex-end',
                   alignItems: 'center',
                 }}>
-                {userStore.isLoggedIn && (
-                  <>
-                    {appStore.darkMode ? (
-                      <NightsStayIcon
-                        style={{ marginRight: 10, marginLeft: 10, cursor: 'pointer' }}
-                        fontSize='small'
-                        color='secondary'
-                        onClick={() => {
-                          appStore.setDarkMode(false)
-                          localStorage.setItem('darkMode', 'OFF')
-                        }}
-                      />
-                    ) : (
-                      <Brightness4Icon
-                        style={{ marginRight: 10, marginLeft: 10, cursor: 'pointer' }}
-                        fontSize='small'
-                        color='primary'
-                        onClick={() => {
-                          appStore.setDarkMode(true)
-                          localStorage.setItem('darkMode', 'ON')
-                        }}
-                      />
-                    )}
-                  </>
-                )}
+                <>
+                  {appStore.darkMode ? (
+                    <NightsStayIcon
+                      style={{ marginRight: 10, marginLeft: 10, cursor: 'pointer' }}
+                      fontSize='small'
+                      color='secondary'
+                      onClick={() => {
+                        appStore.setDarkMode(false)
+                        localStorage.setItem('darkMode', 'OFF')
+                      }}
+                    />
+                  ) : (
+                    <Brightness4Icon
+                      style={{ marginRight: 10, marginLeft: 10, cursor: 'pointer' }}
+                      fontSize='small'
+                      color='primary'
+                      onClick={() => {
+                        appStore.setDarkMode(true)
+                        localStorage.setItem('darkMode', 'ON')
+                      }}
+                    />
+                  )}
+                </>
                 {userStore.isLoggedIn ? (
                   <Avatar
                     alt='User Account'
@@ -119,12 +118,12 @@ function Header(props: any) {
                     className={classes.large}
                     style={{ marginRight: '0.5em', cursor: 'pointer' }}
                     onClick={() =>
-                      props.history.push(Constants.mainConfigs.allPaths.Others.routes.Profile.route)
+                      props.history.push(Constants.mainConfigs.allPaths.routes.Profile.route)
                     }
                   />
                 ) : (
                   <Link
-                    to={Constants.mainConfigs.allPaths.Others.routes.Login.route}
+                    to={Constants.mainConfigs.allPaths.routes.Login.route}
                     style={{
                       textDecoration: 'none',
                     }}>

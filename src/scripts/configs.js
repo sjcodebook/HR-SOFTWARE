@@ -17,7 +17,7 @@ const Configs = {
     FirebaseFunctionUrl: '/api',
     uiConfig: {
       signInFlow: 'redirect',
-      signInSuccessUrl: Constants.mainConfigs.allPaths.Others.routes.Login.route,
+      signInSuccessUrl: Constants.mainConfigs.allPaths.routes.Login.route,
       signInOptions: [
         {
           provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
@@ -50,7 +50,7 @@ const Configs = {
     FirebaseFunctionUrl: '/api',
     uiConfig: {
       signInFlow: 'redirect',
-      signInSuccessUrl: Constants.mainConfigs.allPaths.Others.routes.Login.route,
+      signInSuccessUrl: Constants.mainConfigs.allPaths.routes.Login.route,
       signInOptions: [
         {
           provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
@@ -83,7 +83,7 @@ const Configs = {
     FirebaseFunctionUrl: 'http://localhost:5001/hr-software-33bf5/us-central1',
     uiConfig: {
       signInFlow: 'redirect',
-      signInSuccessUrl: Constants.mainConfigs.allPaths.Others.routes.Login.route,
+      signInSuccessUrl: Constants.mainConfigs.allPaths.routes.Login.route,
       signInOptions: [
         {
           provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
@@ -105,9 +105,9 @@ const Configs = {
   },
 }
 
-let Config: typeof Configs.Local | typeof Configs.Staging | typeof Configs.Production
+let Config
 if (import.meta.env.NODE_ENV === 'development') {
-  Config = Configs.Local as typeof Configs.Local
+  Config = Configs.Local
   console.log(Config.Env + ' Environment')
 } else if (window.location.hostname === 'crm.x.com' && import.meta.env.NODE_ENV === 'production') {
   Config = Configs.Production

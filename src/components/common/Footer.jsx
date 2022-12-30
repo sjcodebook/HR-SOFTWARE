@@ -1,10 +1,11 @@
-import { makeStyles } from 'tss-react/mui'
-import AppBar from '@mui/material/AppBar'
-import Toolbar from '@mui/material/Toolbar'
+import React from 'react'
+import { makeStyles } from '@material-ui/core/styles'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
 
-import appStore from '../../store/AppStore'
+import appStore from './../../store/AppStore'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     marginTop: 100,
@@ -25,7 +26,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export default function Footer() {
-  const { classes } = useStyles()
+  const classes = useStyles()
 
   return (
     <div className={classes.root}>
@@ -34,7 +35,7 @@ export default function Footer() {
         style={{ backgroundColor: appStore.darkMode ? '#303030' : '#f8f8f8' }}
         className={classes.appBar}>
         <Toolbar style={{ color: appStore.darkMode ? '#fff' : '#808080' }}>
-          Copyright &copy; {new Date().getFullYear()} HR SOFTWARE
+          Copyright &copy; {new Date().getFullYear()}&nbsp; &lt; &gt; &nbsp; HR Software
         </Toolbar>
       </AppBar>
     </div>
