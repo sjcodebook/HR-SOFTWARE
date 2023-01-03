@@ -1,6 +1,6 @@
 import * as dayjs from 'dayjs'
 
-import { firestore, auth } from './../scripts/fire'
+import { onAuthStateChanged, auth, collection, getDoc, doc, db, setDoc } from './../scripts/fire'
 import { Constants } from './../scripts/constants'
 
 import userStore from './../store/UserStore'
@@ -8,7 +8,7 @@ import userStore from './../store/UserStore'
 let unsubscribeListeners = []
 
 export const setAuthStateChangeListener = () => {
-  const unsubscribeListenerOnAuth = auth.onAuthStateChanged((currentUser) => {
+  const unsubscribeListenerOnAuth = onAuthStateChanged(auth, (currentUser) => {
     onAuthStateChangedCallback(currentUser)
   })
   unsubscribeListeners.push(unsubscribeListenerOnAuth)
@@ -25,11 +25,12 @@ const onAuthStateChangedCallback = (currentUser) => {
 
 const createUserIfNotExists = async (currentUser, logoutCallback) => {
   try {
-    const docData = await firestore.collection('users').doc(currentUser.uid).get()
+    const userRef = doc(db, 'users', currentUser.uid)
+    const userSnap = await getDoc(userRef)
     let userData
-    if (docData.exists) {
+    if (userSnap.exists()) {
       userData = {
-        ...docData.data(),
+        ...userSnap.data(),
         lastSeen: dayjs().unix(),
       }
     } else {
@@ -42,12 +43,14 @@ const createUserIfNotExists = async (currentUser, logoutCallback) => {
         dob: '',
         picUrl: currentUser.photoURL,
         isActive: true,
+        isAdmin: false,
         lastSeen: dayjs().unix(),
         createdAt: dayjs().unix(),
         isFirstLogin: true,
       }
     }
-    await firestore.collection('users').doc(currentUser.uid).set(userData, { merge: true })
+    const usersRef = collection(db, 'users')
+    await setDoc(doc(usersRef, currentUser.uid), userData, { merge: true })
     return Promise.resolve(userData)
   } catch (err) {
     console.error(`createUserIfNotExists. Error:\n${err}`)
@@ -68,7 +71,9 @@ const loadUser = async (userData) => {
     userData.picUrl,
     userData.lastSeen,
     userData.createdAt,
-    userData.isFirstLogin
+    userData.isFirstLogin,
+    userData.isActive,
+    userData.isAdmin
   )
 }
 

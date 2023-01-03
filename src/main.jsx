@@ -9,11 +9,9 @@ import App from './App'
 window.global = window
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <SimpleReactLightbox>
-      <MuiPickersUtilsProvider utils={DayjsUtils}>
-        <App />
-      </MuiPickersUtilsProvider>
-    </SimpleReactLightbox>
-  </React.StrictMode>
+  <SimpleReactLightbox>
+    <MuiPickersUtilsProvider utils={DayjsUtils}>
+      <App />
+    </MuiPickersUtilsProvider>
+  </SimpleReactLightbox>
 )

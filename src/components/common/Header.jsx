@@ -10,8 +10,6 @@ import Avatar from '@material-ui/core/Avatar'
 import Brightness4Icon from '@material-ui/icons/Brightness4'
 import NightsStayIcon from '@material-ui/icons/NightsStay'
 
-// import MenuDrawer from './MenuDrawer'
-
 import { Constants } from './../../scripts/constants'
 
 import appStore from './../../store/AppStore'
@@ -62,7 +60,6 @@ function Header(props) {
                   justifyContent: 'flex-start',
                   alignItems: 'center',
                 }}>
-                {/* <MenuDrawer userStore={userStore} /> */}
                 <Avatar
                   alt='Business Manager'
                   src={LogoShort}

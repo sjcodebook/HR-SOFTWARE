@@ -31,7 +31,6 @@ const QuestionScreen = ({ userStore, firstLogin, setVisiblity }) => {
   const [address, setAddress] = useState(userStore.currentUser.address)
   const [phone, setPhone] = useState(userStore.currentUser.phone)
   const [dob, setDob] = useState(userStore.currentUser.dob)
-  const [job, setJob] = useState(userStore.currentUser.jobConfig.id)
   const [eName, setEName] = useState(userStore.currentUser.emergencyContactName)
   const [ePhone, setEPhone] = useState(userStore.currentUser.emergencyContactNumber)
   const [canSubmit, setCanSubmit] = useState(false)
@@ -60,7 +59,6 @@ const QuestionScreen = ({ userStore, firstLogin, setVisiblity }) => {
       !address?.trim() ||
       !phone?.trim() ||
       !dob ||
-      !job ||
       !eName?.trim() ||
       !ePhone?.trim()
     ) {
@@ -68,7 +66,7 @@ const QuestionScreen = ({ userStore, firstLogin, setVisiblity }) => {
     } else {
       setCanSubmit(true)
     }
-  }, [name, address, phone, dob, job, eName, ePhone])
+  }, [name, address, phone, dob, eName, ePhone])
 
   const handleSubmit = () => {
     setIsLoading(true)
@@ -102,7 +100,6 @@ const QuestionScreen = ({ userStore, firstLogin, setVisiblity }) => {
       {() => (
         <Grid
           container
-          spacing={2}
           direction='column'
           alignItems='center'
           justify='center'
@@ -178,28 +175,6 @@ const QuestionScreen = ({ userStore, firstLogin, setVisiblity }) => {
                         shrink: true,
                       }}
                     />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <div style={{ textAlign: 'center' }}>
-                      <FormControl variant='outlined' className={classes.formControlSelect}>
-                        <InputLabel id='access-search-label'>Job</InputLabel>
-                        <Select
-                          labelId='job-question-screen-label'
-                          id='job-question-screen'
-                          value={job}
-                          onChange={(e) => setJob(e.target.value)}
-                          label='Job'>
-                          <MenuItem value=''>
-                            <em>None</em>
-                          </MenuItem>
-                          {allJobs.map((job) => (
-                            <MenuItem key={job.id} value={job.id}>
-                              {job.label}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </div>
                   </Grid>
                 </Grid>
                 <br />

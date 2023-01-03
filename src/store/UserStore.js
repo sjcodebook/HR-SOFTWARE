@@ -17,6 +17,8 @@ function UserStore() {
       lastSeen: null,
       createdAt: null,
       isFirstLogin: null,
+      isActive: null,
+      isAdmin: null,
     },
 
     get isLoggedIn() {
@@ -36,7 +38,9 @@ function UserStore() {
       picUrl,
       lastSeen,
       createdAt,
-      isFirstLogin
+      isFirstLogin,
+      isActive,
+      isAdmin
     ) {
       this.currentUser.id = id
       this.currentUser.email = email
@@ -48,6 +52,8 @@ function UserStore() {
       this.currentUser.lastSeen = lastSeen
       this.currentUser.createdAt = createdAt
       this.currentUser.isFirstLogin = isFirstLogin
+      this.currentUser.isActive = isActive
+      this.currentUser.isAdmin = isAdmin
     },
 
     resetStore() {
@@ -62,6 +68,8 @@ function UserStore() {
         lastSeen: null,
         createdAt: null,
         isFirstLogin: null,
+        isActive: null,
+        isAdmin: null,
       }
     },
   })

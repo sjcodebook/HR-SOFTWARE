@@ -1,4 +1,5 @@
-import firebase from 'firebase'
+import { GoogleAuthProvider, EmailAuthProvider } from 'firebase/auth'
+
 // import userStore from './../store/UserStore'
 
 import { Constants } from './../scripts/constants'
@@ -20,12 +21,12 @@ const Configs = {
       signInSuccessUrl: Constants.mainConfigs.allPaths.routes.Login.route,
       signInOptions: [
         {
-          provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+          provider: GoogleAuthProvider.PROVIDER_ID,
           customParameters: {
             prompt: 'select_account',
           },
         },
-        firebase.auth.EmailAuthProvider.PROVIDER_ID,
+        EmailAuthProvider.PROVIDER_ID,
       ],
       callbacks: {
         // signInSuccessWithAuthResult: (authResult, redirectUrl) => {
@@ -53,12 +54,12 @@ const Configs = {
       signInSuccessUrl: Constants.mainConfigs.allPaths.routes.Login.route,
       signInOptions: [
         {
-          provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+          provider: GoogleAuthProvider.PROVIDER_ID,
           customParameters: {
             prompt: 'select_account',
           },
         },
-        firebase.auth.EmailAuthProvider.PROVIDER_ID,
+        EmailAuthProvider.PROVIDER_ID,
       ],
       callbacks: {
         // signInSuccessWithAuthResult: (authResult, redirectUrl) => {
@@ -86,12 +87,12 @@ const Configs = {
       signInSuccessUrl: Constants.mainConfigs.allPaths.routes.Login.route,
       signInOptions: [
         {
-          provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+          provider: GoogleAuthProvider.PROVIDER_ID,
           customParameters: {
             prompt: 'select_account',
           },
         },
-        firebase.auth.EmailAuthProvider.PROVIDER_ID,
+        EmailAuthProvider.PROVIDER_ID,
       ],
       callbacks: {
         // signInSuccessWithAuthResult: (authResult, redirectUrl) => {
