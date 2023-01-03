@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Observer } from 'mobx-react-lite'
-import * as dayjs from 'dayjs'
+import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import Avatar from '@material-ui/core/Avatar'
 import Grid from '@material-ui/core/Grid'
@@ -8,14 +8,109 @@ import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import EditIcon from '@material-ui/icons/Edit'
+import ClearIcon from '@material-ui/icons/Clear'
 
 import AuthChecker from './../components/common/AuthChecker'
-import QuestionScreen from './../components/common/QuestionScreen'
 
-import appStore from '../store/AppStore'
 import userStore from '../store/UserStore'
 
+import { showToast } from './../scripts/localActions'
 import { logout } from './../scripts/remoteActions'
+import { editUserName } from '../scripts/remote/usersActions'
+
+const EditScreen = ({ userStore, firstLogin, setVisiblity }) => {
+  const [newName, setNewName] = useState(userStore.currentUser.name)
+  const [canSubmit, setCanSubmit] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    if (!newName?.trim() || newName?.trim() === userStore.currentUser.name) {
+      setCanSubmit(false)
+    } else {
+      setCanSubmit(true)
+    }
+  }, [newName, userStore.currentUser.name])
+
+  const handleSubmit = () => {
+    setIsLoading(true)
+    editUserName(userStore.currentUser.id, newName?.trim())
+      .then((res) => {
+        showToast('User Info Updated Successfully.')
+        window.location.reload()
+      })
+      .catch((err) => {
+        setIsLoading(false)
+        showToast('Something Went wrong updating user.', 'error')
+        console.error('handleSubmit:UserNameUpdate\n', err)
+      })
+  }
+
+  return (
+    <Observer>
+      {() => (
+        <Grid
+          container
+          direction='column'
+          alignItems='center'
+          justifyContent='center'
+          style={{ minHeight: '80vh' }}>
+          <Grid item xs={12} style={{ textAlign: 'center' }}>
+            <h2>Edit Saved Information</h2>
+          </Grid>
+          <Grid item xs={12}>
+            <Card style={{ minWidth: 290, textAlign: 'center', padding: '20px' }}>
+              <CardContent>
+                <Grid container spacing={4}>
+                  {!firstLogin && (
+                    <Grid item xs={12}>
+                      <div style={{ textAlign: 'right' }}>
+                        <ClearIcon
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => setVisiblity(false)}
+                        />
+                      </div>
+                    </Grid>
+                  )}
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      value={newName}
+                      label='Name'
+                      variant='outlined'
+                      onChange={(e) => setNewName(e.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      disabled={true}
+                      type='email'
+                      value={userStore.currentUser.email}
+                      label='Email'
+                      variant='outlined'
+                    />
+                  </Grid>
+                </Grid>
+              </CardContent>
+              <br />
+              <Button
+                disabled={!canSubmit || isLoading}
+                variant='contained'
+                color='primary'
+                onClick={() => handleSubmit()}>
+                Submit
+              </Button>
+            </Card>
+          </Grid>
+          <br />
+          <Grid item xs={12}>
+            <Button variant='contained' color='secondary' onClick={logout}>
+              Logout
+            </Button>
+          </Grid>
+        </Grid>
+      )}
+    </Observer>
+  )
+}
 
 const ProfilePage = () => {
   const [showEditScreen, setShowEditScreen] = useState(false)
@@ -25,7 +120,7 @@ const ProfilePage = () => {
       <Observer>
         {() => (
           <AuthChecker
-            children={<QuestionScreen userStore={userStore} setVisiblity={setShowEditScreen} />}
+            children={<EditScreen userStore={userStore} setVisiblity={setShowEditScreen} />}
           />
         )}
       </Observer>
@@ -42,7 +137,7 @@ const ProfilePage = () => {
               spacing={0}
               direction='column'
               alignItems='center'
-              justify='center'
+              justifyContent='center'
               style={{ marginTop: '40px' }}>
               <Grid item xs={12}>
                 <Avatar
@@ -58,7 +153,7 @@ const ProfilePage = () => {
               </Grid>
               <br />
               <Grid item xs={12}>
-                <Card style={{ minWidth: 290, textAlign: 'center', padding: '20px' }}>
+                <Card style={{ minWidth: 290, textAlign: 'center', padding: '15px' }}>
                   <CardContent>
                     <div style={{ textAlign: 'right' }}>
                       <EditIcon
@@ -71,47 +166,6 @@ const ProfilePage = () => {
                     </Typography>
                     <br />
                     <Typography color='textSecondary'>{userStore.currentUser.email}</Typography>
-                    <Typography color='textSecondary'>{userStore.currentUser.phone}</Typography>
-                    <Typography color='textSecondary'>
-                      {dayjs.unix(userStore.currentUser.dob).format('DD/MM/YYYY')}
-                    </Typography>
-                    <br />
-                    <Typography>
-                      {userStore.currentUser.isAdmin ? (
-                        <b>ADMIN</b>
-                      ) : (
-                        <>
-                          <b>Job: </b>
-                          {userStore.currentUser.jobConfig?.label}
-                        </>
-                      )}
-                    </Typography>
-                    <Typography>
-                      <b>Address: </b>
-                      {userStore.currentUser.address}
-                    </Typography>
-                    <Typography>
-                      <b>Salary: </b>
-                      {userStore.currentUser.salary
-                        ? `$${userStore.currentUser.salary}/hr`
-                        : 'Not Entered'}
-                    </Typography>
-                    <br />
-                    <Card
-                      style={{
-                        textAlign: 'center',
-                        backgroundColor: appStore.darkMode ? '#303030' : '#ebebeb',
-                      }}>
-                      <CardContent>
-                        <h4>Emergency Contact Person Information:</h4>
-                        <Typography>
-                          <b>Name:</b> {userStore.currentUser.emergencyContactName}
-                        </Typography>
-                        <Typography>
-                          <b>Phone Number:</b> {userStore.currentUser.emergencyContactNumber}
-                        </Typography>
-                      </CardContent>
-                    </Card>
                   </CardContent>
                   <br />
                   <Button variant='contained' color='secondary' onClick={logout}>
