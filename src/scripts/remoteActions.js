@@ -38,15 +38,11 @@ const createUserIfNotExists = async (currentUser, logoutCallback) => {
         uid: currentUser.uid,
         email: currentUser.email,
         name: currentUser.displayName,
-        address: '',
-        phone: '',
-        dob: '',
         picUrl: currentUser.photoURL,
-        isActive: true,
         isAdmin: false,
+        isActive: false,
         lastSeen: dayjs().unix(),
         createdAt: dayjs().unix(),
-        isFirstLogin: true,
       }
     }
     const usersRef = collection(db, 'users')
@@ -65,15 +61,11 @@ const loadUser = async (userData) => {
     userData.uid,
     userData.email,
     userData.name,
-    userData.address,
-    userData.phone,
-    userData.dob,
     userData.picUrl,
     userData.lastSeen,
     userData.createdAt,
-    userData.isFirstLogin,
-    userData.isActive,
-    userData.isAdmin
+    userData.isAdmin,
+    userData.isActive
   )
 }
 

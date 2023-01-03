@@ -120,7 +120,7 @@ const AuthChecker = (props) => {
         <>
           {userStore.isLoggedIn ? (
             <>
-              {userStore.currentUser.isFirstLogin && !userStore.currentUser.isAdmin ? (
+              {!userStore.currentUser.isAdmin ? (
                 <QuestionScreen userStore={userStore} firstLogin={true} />
               ) : (
                 <>
