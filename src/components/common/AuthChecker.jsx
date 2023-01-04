@@ -10,6 +10,7 @@ import appStore from './../../store/AppStore'
 
 import { Constants } from './../../scripts/constants'
 import { asyncForEach } from './../../scripts/localActions'
+import { logout } from './../../scripts/remoteActions'
 
 const AuthChecker = (props) => {
   const [showLoader, setShowLoader] = useState(false)
@@ -88,7 +89,23 @@ const AuthChecker = (props) => {
       {() => (
         <>
           {userStore.isLoggedIn ? (
-            <>{props.children}</>
+            <>
+              {userStore.currentUser.isAdmin || userStore.currentUser.isActive ? (
+                <>{props.children}</>
+              ) : (
+                <Container fixed style={{ textAlign: 'center', marginTop: '15vh' }}>
+                  <h2>You are not authorized to use this application</h2>
+                  <h2>Please ask admin to activate your account</h2>
+                  <Button
+                    variant='contained'
+                    color='secondary'
+                    style={{ marginLeft: '10px' }}
+                    onClick={logout}>
+                    Logout
+                  </Button>
+                </Container>
+              )}
+            </>
           ) : (
             <Container fixed style={{ textAlign: 'center', marginTop: '15vh' }}>
               <h2>You need to login to use this application</h2>

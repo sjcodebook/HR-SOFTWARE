@@ -84,3 +84,5 @@ export const logout = () => {
       console.error(`logout. Error:\n${err}`)
     })
 }
+
+export { editUserName, getAllUsers, setActiveStatus, setAdminStatus } from './remote/usersActions'

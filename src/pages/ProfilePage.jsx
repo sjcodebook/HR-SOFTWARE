@@ -16,7 +16,7 @@ import userStore from '../store/UserStore'
 
 import { showToast } from './../scripts/localActions'
 import { logout } from './../scripts/remoteActions'
-import { editUserName } from '../scripts/remote/usersActions'
+import { editUserName } from '../scripts/remoteActions'
 
 const EditScreen = ({ userStore, firstLogin, setVisiblity }) => {
   const [newName, setNewName] = useState(userStore.currentUser.name)

@@ -35,7 +35,7 @@ export default function Footer() {
         style={{ backgroundColor: appStore.darkMode ? '#303030' : '#f8f8f8' }}
         className={classes.appBar}>
         <Toolbar style={{ color: appStore.darkMode ? '#fff' : '#808080' }}>
-          Copyright &copy; {new Date().getFullYear()}&nbsp; &lt; &gt; &nbsp; HR Software
+          Copyright &copy; {new Date().getFullYear()}&nbsp; Resume Manager
         </Toolbar>
       </AppBar>
     </div>

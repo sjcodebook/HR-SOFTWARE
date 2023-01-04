@@ -61,7 +61,7 @@ function Header(props) {
                   alignItems: 'center',
                 }}>
                 <Avatar
-                  alt='Business Manager'
+                  alt='Resume Manager'
                   src={LogoShort}
                   className={classes.large}
                   variant='square'
@@ -76,7 +76,7 @@ function Header(props) {
                   onClick={() =>
                     props.history.push(Constants.mainConfigs.allPaths.routes.Home.route)
                   }>
-                  Business Manager
+                  Resume Manager
                 </Typography>
               </div>
               <div
