@@ -6,6 +6,7 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 
 import UsersCard from './Users'
+import ResumesCard from './Resumes'
 
 import userStore from './../store/UserStore'
 import { getAllUsers } from './../scripts/remoteActions'
@@ -42,6 +43,9 @@ const Dashboard = () => {
               <UsersCard users={users} setRefresh={setRefresh} />
             </Grid>
           )}
+          <Grid item xs={12}>
+            <ResumesCard users={users} setRefresh={setRefresh} />
+          </Grid>
         </Grid>
       </Container>
     </div>

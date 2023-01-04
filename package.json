@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@date-io/dayjs": "1.x",
+    "@inovua/reactdatagrid-community": "^5.8.1",
     "@loadable/component": "^5.14.1",
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
