@@ -101,7 +101,7 @@ const UsersCard = ({ users, setRefresh }) => {
               </TableHead>
               <TableBody>
                 {users.map((user) => (
-                  <Row key={user.id} user={user} setRefresh={setRefresh} />
+                  <Row key={user.uid} user={user} setRefresh={setRefresh} />
                 ))}
               </TableBody>
             </Table>
@@ -146,7 +146,7 @@ const Row = ({ user, setRefresh }) => {
 
   return (
     <Fragment>
-      <TableRow key={user.id} className={classes.rowRoot}>
+      <TableRow className={classes.rowRoot}>
         <TableCell align='center'>{user.name}</TableCell>
         <Tooltip title='Click To Mail' placement='bottom'>
           <TableCell

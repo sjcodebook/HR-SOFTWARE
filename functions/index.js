@@ -55,6 +55,9 @@ app.post('/saveCandidateData', filesUpload, (req, res) => {
         pdfUrl: `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(
           filePath
         )}?alt=media&token=${token}`,
+        role: null,
+        note: null,
+        status: null,
         createdAt: dayjs().unix(),
       })
       .then(() => {

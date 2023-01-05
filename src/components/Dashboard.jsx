@@ -25,7 +25,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     getAllUsers().then((snapshot) => {
-      setUsers(snapshot.docs.map((doc) => doc.data()))
+      setUsers(snapshot.docs.map((doc) => doc.data()).sort((a, b) => b.lastSeen - a.lastSeen))
     })
   }, [refresh])
 
@@ -44,7 +44,7 @@ const Dashboard = () => {
             </Grid>
           )}
           <Grid item xs={12}>
-            <ResumesCard users={users} setRefresh={setRefresh} />
+            <ResumesCard />
           </Grid>
         </Grid>
       </Container>
