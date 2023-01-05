@@ -86,3 +86,4 @@ export const logout = () => {
 }
 
 export { editUserName, getAllUsers, setActiveStatus, setAdminStatus } from './remote/usersActions'
+export { getAllResumes } from './remote/resumesActions.js'

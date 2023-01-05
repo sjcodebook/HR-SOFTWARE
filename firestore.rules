@@ -7,6 +7,12 @@ service cloud.firestore {
       allow delete: if isAuthorized(userId);
       allow update: if isSignedIn();
     }
+    match /resumes/{resumeId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn();
+      allow delete: if isSignedIn();
+      allow update: if isSignedIn();
+    }
   }
 }
 

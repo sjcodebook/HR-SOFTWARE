@@ -1,4 +1,5 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
+import dayjs from 'dayjs'
 import ReactDataGrid from '@inovua/reactdatagrid-community'
 import SelectEditor from '@inovua/reactdatagrid-community/SelectEditor'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
@@ -6,8 +7,11 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import RefreshIcon from '@material-ui/icons/Refresh'
+import LinkIcon from '@material-ui/icons/Link'
 
 import appStore from '../store/AppStore'
+import { getAllResumes } from '../scripts/remoteActions'
+import { showToast } from '../scripts/localActions'
 
 const countryData = [
   { id: 'uk', label: 'United Kindom' },
@@ -15,14 +19,50 @@ const countryData = [
   { id: 'ca', label: 'Canada' },
 ]
 
+const groups = [
+  { name: 'personalInfo', header: 'Personal info' },
+  { name: 'resumeInfo', header: 'Résumé Info' },
+  { name: 'assessment', header: 'Assessment' },
+]
+
 const columns = [
-  { name: 'name', header: 'Name', defaultFlex: 1 },
-  { name: 'email', header: 'Email', defaultFlex: 1 },
-  { name: 'phone', header: 'Phone', defaultFlex: 1 },
-  { name: 'role', header: 'Role', defaultFlex: 1 },
-  { name: 'submitted-on', header: 'Submitted On', defaultFlex: 1, editable: false },
-  { name: 'note', header: 'Note', defaultFlex: 1, sortable: false },
-  { name: 'resume', header: 'Résumé', defaultFlex: 1, sortable: false },
+  { name: 'id', header: 'Id', defaultVisible: false, defaultWidth: 50 },
+  { name: 'name', header: 'Name', defaultFlex: 1, group: 'personalInfo' },
+  { name: 'email', header: 'Email', defaultFlex: 1, group: 'personalInfo' },
+  { name: 'phoneNumber', header: 'Phone', defaultFlex: 1, group: 'personalInfo' },
+  {
+    name: 'submittedOn',
+    header: 'Submitted On',
+    defaultFlex: 1,
+    editable: false,
+    group: 'resumeInfo',
+  },
+  {
+    name: 'pdfUrl',
+    header: 'Résumé',
+    defaultFlex: 1,
+    render: ({ value }) => (
+      <LinkIcon style={{ cursor: 'pointer' }} onClick={() => window.open(value, '_blank')} />
+    ),
+    sortable: false,
+    editable: false,
+    group: 'resumeInfo',
+  },
+  {
+    name: 'role',
+    header: 'Role',
+    defaultFlex: 1,
+    width: 100,
+    render: ({ value }) => value,
+    editor: SelectEditor,
+    editorProps: {
+      idProperty: 'id',
+      dataSource: countryData,
+      collapseOnSelect: true,
+      clearIcon: null,
+    },
+    group: 'assessment',
+  },
   {
     name: 'status',
     header: 'Status',
@@ -36,34 +76,20 @@ const columns = [
       collapseOnSelect: true,
       clearIcon: null,
     },
+    group: 'assessment',
   },
+  { name: 'note', header: 'Note', defaultFlex: 1, sortable: false, group: 'assessment' },
 ]
 
-const data = [
-  { name: 'John Grayner', age: 35, uniqueId: 1 },
-  { name: 'Mary Stones', age: 25, uniqueId: 2 },
-  { name: 'Robert Fil', age: 27, uniqueId: 3 },
-  { name: 'Roger Bobson', age: 81, uniqueId: 4 },
-  { name: 'Billary Konwik', age: 18, uniqueId: 5 },
-  { name: 'Bob Martin', age: 18, uniqueId: 6 },
-  { name: 'Matthew Richardson', age: 54, uniqueId: 7 },
-  { name: 'Richy Peterson', age: 54, uniqueId: 8 },
-  { name: 'Bryan Martin', age: 40, uniqueId: 9 },
-]
-
-const downloadBlob = (blob, fileName = 'grid-data.csv') => {
+const downloadBlob = (blob, fileName = 'resumes.csv') => {
   const link = document.createElement('a')
   const url = URL.createObjectURL(blob)
-
   link.setAttribute('href', url)
   link.setAttribute('download', fileName)
   link.style.position = 'absolute'
   link.style.visibility = 'hidden'
-
   document.body.appendChild(link)
-
   link.click()
-
   document.body.removeChild(link)
 }
 
@@ -96,30 +122,51 @@ export const useStyles = makeStyles((theme) =>
 
 const ResumesCard = () => {
   const [isLoading, setIsLoading] = useState(false)
-  const [dataSource, setDataSource] = useState(data)
+  const [refresh, setRefresh] = useState(false)
+  const [resumes, setResumes] = useState([])
   const [gridRef, setGridRef] = useState(null)
   const classes = useStyles()
+
+  useEffect(() => {
+    setIsLoading(true)
+    getAllResumes()
+      .then((snapshot) => {
+        setResumes(
+          snapshot.docs
+            .map((doc) => {
+              const docData = doc.data()
+              docData.id = doc.id
+              docData.submittedOn = dayjs.unix(docData.createdAt).format('DD/MM/YYYY')
+              return docData
+            })
+            .sort((a, b) => b.createdAt - a.createdAt)
+        )
+        setIsLoading(false)
+      })
+      .catch((err) => {
+        console.log(err)
+        showToast('Error fetching resumes', 'error')
+        setIsLoading(false)
+      })
+  }, [refresh])
 
   const onEditComplete = useCallback(
     ({ value, columnId, rowId }) => {
       console.log({ value, columnId, rowId })
-      const data = [...dataSource]
+      const data = [...resumes]
       data[rowId - 1][columnId] = value
 
-      setDataSource(data)
+      setResumes(data)
     },
-    [dataSource]
+    [resumes]
   )
 
   const exportCSV = () => {
     const columns = gridRef.current.visibleColumns
-
-    const header = columns.map((c) => c.name).join(SEPARATOR)
+    const header = columns.map((c) => c.header).join(SEPARATOR)
     const rows = gridRef.current.data.map((data) => columns.map((c) => data[c.id]).join(SEPARATOR))
-
     const contents = [header].concat(rows).join('\n')
     const blob = new Blob([contents], { type: 'text/csv;charset=utf-8;' })
-
     downloadBlob(blob)
   }
 
@@ -131,7 +178,7 @@ const ResumesCard = () => {
           className={isLoading ? classes.rotateIcon : ''}
           style={{ cursor: 'pointer' }}
           onClick={() => {
-            // setRefresh((prev) => !prev)
+            setRefresh((prev) => !prev)
             setIsLoading(true)
             setTimeout(() => {
               setIsLoading(false)
@@ -147,7 +194,7 @@ const ResumesCard = () => {
         </Button>
       </Typography>
       <Typography variant='body1' color='textSecondary' align='center' gutterBottom>
-        Total Results: {[].length}
+        Total Results: {resumes.length}
       </Typography>
       <Paper
         style={{ backgroundColor: appStore.darkMode ? '#303030' : '#fcfcfc' }}
@@ -158,9 +205,10 @@ const ResumesCard = () => {
           style={gridStyle}
           idProperty='uniqueId'
           columns={columns}
-          dataSource={dataSource}
+          dataSource={resumes}
           onEditComplete={onEditComplete}
           editable={true}
+          groups={groups}
         />
       </Paper>
     </Paper>
