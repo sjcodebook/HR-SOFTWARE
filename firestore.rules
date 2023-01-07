@@ -13,6 +13,18 @@ service cloud.firestore {
       allow delete: if isSignedIn();
       allow update: if isSignedIn();
     }
+    match /roles/{roleId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn();
+      allow delete: if isSignedIn();
+      allow update: if isSignedIn();
+    }
+    match /statuses/{statusId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn();
+      allow delete: if isSignedIn();
+      allow update: if isSignedIn();
+    }
   }
 }
 

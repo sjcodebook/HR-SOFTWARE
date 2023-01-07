@@ -170,31 +170,6 @@ export const isNumeric = (string = '') => {
   return !isNaN(string) && !isNaN(parseFloat(string))
 }
 
-export const handleWeekChange = (action, weekStart, weekEnd, setWeekStart, setWeekEnd) => {
-  if (action === 'prev') {
-    setWeekEnd(dayjs.unix(weekStart).subtract(1, 'day').endOf('day').unix())
-    setWeekStart((prevVal) => {
-      return dayjs.unix(prevVal).subtract(1, 'week').startOf('day').unix()
-    })
-  } else if (action === 'next') {
-    setWeekStart(dayjs.unix(weekEnd).add(1, 'day').startOf('day').unix())
-    setWeekEnd((prevVal) => {
-      return dayjs.unix(prevVal).add(1, 'week').endOf('day').unix()
-    })
-  }
-}
-
-export const getInitialWeekStart = (resetDay = Constants.ResetDay) => {
-  // resetDay => 0: Sun, 1: Mon, 2: Tue, 3: Wed, 4: Thu, 5: Fri, 6: Sat
-  return dayjs().unix() < dayjs().startOf('week').add(resetDay, 'days').startOf('day').unix()
-    ? dayjs().subtract(1, 'week').startOf('week').add(resetDay, 'days').startOf('day').unix()
-    : dayjs().startOf('week').add(resetDay, 'days').startOf('day').unix()
-}
-
-export const getInitialWeekEnd = (weekStart) => {
-  return dayjs.unix(weekStart).add(1, 'week').subtract(1, 'day').endOf('day').unix()
-}
-
 export const resizeFile = (file) => {
   return new Promise((resolve) => {
     Resizer.imageFileResizer(
@@ -269,4 +244,16 @@ export const asyncForEach = (array, callback, done) => {
     return callback(array[i], () => runAndWait(i + 1))
   }
   return runAndWait(0)
+}
+
+export const getContrastYIQ = (hexcolor) => {
+  var r = parseInt(hexcolor.substring(1, 3), 16)
+  var g = parseInt(hexcolor.substring(3, 5), 16)
+  var b = parseInt(hexcolor.substring(5, 7), 16)
+  var yiq = (r * 299 + g * 587 + b * 114) / 1000
+  return yiq >= 128 ? 'black' : 'white'
+}
+
+export const convertToKey = (str) => {
+  return str.trim().replace(/ /g, '_').toUpperCase()
 }

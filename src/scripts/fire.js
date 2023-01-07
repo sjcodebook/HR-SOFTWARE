@@ -11,4 +11,13 @@ const auth = getAuth(app)
 const db = getFirestore(app)
 export { auth, db }
 export { onAuthStateChanged } from 'firebase/auth'
-export { getDoc, getDocs, setDoc, doc, collection } from 'firebase/firestore'
+export {
+  getDoc,
+  getDocs,
+  setDoc,
+  doc,
+  collection,
+  deleteDoc,
+  addDoc,
+  onSnapshot,
+} from 'firebase/firestore'
