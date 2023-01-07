@@ -5,6 +5,8 @@ import { Observer } from 'mobx-react-lite'
 import dayjs from 'dayjs'
 import ReactDataGrid from '@inovua/reactdatagrid-community'
 import SelectEditor from '@inovua/reactdatagrid-community/SelectEditor'
+// import SelectFilter from '@inovua/reactdatagrid-community/SelectFilter'
+// import DateFilter from '@inovua/reactdatagrid-community/DateFilter'
 import { makeStyles, createStyles, useTheme } from '@material-ui/core/styles'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import Paper from '@material-ui/core/Paper'
@@ -108,6 +110,19 @@ const ResumesCard = () => {
       return { id: status.statusKey, label: status.statusName }
     })
   }, [statuses])
+
+  const filterValue = useMemo(
+    () => [
+      { name: 'name', operator: 'startsWith', type: 'string', value: '' },
+      { name: 'email', operator: 'startsWith', type: 'string', value: '' },
+      { name: 'phoneNumber', operator: 'startsWith', type: 'string', value: '' },
+      { name: 'note', operator: 'startsWith', type: 'string', value: '' },
+      { name: 'submittedOn', operator: 'startsWith', type: 'string', value: '' },
+      // { name: 'role', operator: 'eq', type: 'select', value: '' },
+      // { name: 'status', operator: 'eq', type: 'select', value: '' },
+    ],
+    []
+  )
 
   const columns = useMemo(
     () => [
@@ -339,6 +354,7 @@ const ResumesCard = () => {
               columns={columns}
               dataSource={resumes}
               onEditComplete={onEditComplete}
+              defaultFilterValue={filterValue}
               editable={true}
               groups={groups}
             />
