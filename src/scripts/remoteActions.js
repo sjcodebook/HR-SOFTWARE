@@ -91,6 +91,11 @@ export {
   setActiveStatus,
   setAdminStatus,
 } from './remote/usersActions'
-export { getAllResumesLive } from './remote/resumesActions'
+export {
+  getAllResumesLive,
+  editResumeStatus,
+  editResumeRole,
+  editResumeData,
+} from './remote/resumesActions'
 export { getAllRolesLive, addRole, removeRole } from './remote/rolesActions'
 export { getAllStatusesLive, addStatus, removeStatus } from './remote/statusesActions'

@@ -27,6 +27,7 @@ import {
   addStatus,
   removeRole,
   removeStatus,
+  editResumeData,
 } from '../scripts/remoteActions'
 import { showToast, getContrastYIQ, convertToKey } from '../scripts/localActions'
 
@@ -144,6 +145,9 @@ const ResumesCard = () => {
         ),
         defaultWidth: 180,
         render: ({ value }) => {
+          if (!value || !roles[value]) {
+            return null
+          }
           const role = roles[value]
           return (
             <div
@@ -185,6 +189,9 @@ const ResumesCard = () => {
         ),
         defaultWidth: 120,
         render: ({ value }) => {
+          if (!value || !statuses[value]) {
+            return null
+          }
           const status = statuses[value]
           return (
             <div
@@ -197,6 +204,7 @@ const ResumesCard = () => {
                 whiteSpace: 'nowrap',
                 textOverflow: 'ellipsis',
                 maxWidth: '100%',
+                textAlign: 'center',
               }}>
               {status ? status.statusName : ''}
             </div>
@@ -281,16 +289,16 @@ const ResumesCard = () => {
     }
   }, [])
 
-  const onEditComplete = useCallback(
-    ({ value, columnId, rowId }) => {
-      console.log({ value, columnId, rowId })
-      const data = [...resumes]
-      data[rowId - 1][columnId] = value
-
-      setResumes(data)
-    },
-    [resumes]
-  )
+  const onEditComplete = useCallback(({ data, columnId, value }) => {
+    const newResumeData = { ...data }
+    newResumeData[columnId] = value
+    delete newResumeData.id
+    delete newResumeData.submittedOn
+    editResumeData(data.id, newResumeData).catch((err) => {
+      console.log(err)
+      showToast('Error Updating Resume Data', 'error')
+    })
+  }, [])
 
   const exportCSV = () => {
     const columns = gridRef.current.visibleColumns
