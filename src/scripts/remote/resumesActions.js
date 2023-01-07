@@ -1,6 +1,5 @@
-import { collection, db, getDocs } from './../../scripts/fire'
+import { collection, db, onSnapshot } from './../../scripts/fire'
 
-export function getAllResumes() {
-  const resumesRef = collection(db, 'resumes')
-  return getDocs(resumesRef)
+export function getAllResumesLive(successCallback, errorCallback) {
+  return onSnapshot(collection(db, 'resumes'), successCallback, errorCallback)
 }

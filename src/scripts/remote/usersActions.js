@@ -1,13 +1,12 @@
-import { collection, doc, db, setDoc, getDocs } from './../../scripts/fire'
+import { collection, doc, db, setDoc, onSnapshot } from './../../scripts/fire'
 
 export function editUserName(userId, newName) {
   const usersRef = collection(db, 'users')
   return setDoc(doc(usersRef, userId), { name: newName }, { merge: true })
 }
 
-export function getAllUsers() {
-  const usersRef = collection(db, 'users')
-  return getDocs(usersRef)
+export function getAllUsersLive(successCallback, errorCallback) {
+  return onSnapshot(collection(db, 'users'), successCallback, errorCallback)
 }
 
 export function setAdminStatus(userId, isAdmin) {

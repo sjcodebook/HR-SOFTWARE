@@ -9,7 +9,8 @@ import UsersCard from './Users'
 import ResumesCard from './Resumes'
 
 import userStore from './../store/UserStore'
-import { getAllUsers } from './../scripts/remoteActions'
+import { showToast } from './../scripts/localActions'
+import { getAllUsersLive } from './../scripts/remoteActions'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,9 +25,19 @@ const Dashboard = () => {
   const [refresh, setRefresh] = useState(false)
 
   useEffect(() => {
-    getAllUsers().then((snapshot) => {
-      setUsers(snapshot.docs.map((doc) => doc.data()).sort((a, b) => b.lastSeen - a.lastSeen))
-    })
+    const unsubscribeUsersData = getAllUsersLive(
+      (snapshot) => {
+        setUsers(snapshot.docs.map((doc) => doc.data()).sort((a, b) => b.lastSeen - a.lastSeen))
+      },
+      (err) => {
+        console.log(err)
+        showToast('Error Fetching Users', 'error')
+      }
+    )
+
+    return () => {
+      unsubscribeUsersData()
+    }
   }, [refresh])
 
   return (

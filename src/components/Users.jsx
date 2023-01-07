@@ -12,7 +12,6 @@ import TableCell from '@material-ui/core/TableCell'
 import TableContainer from '@material-ui/core/TableContainer'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
-import RefreshIcon from '@material-ui/icons/Refresh'
 
 import { showToast } from '../scripts/localActions'
 import { setAdminStatus, setActiveStatus } from './../scripts/remoteActions'
@@ -52,24 +51,12 @@ export const useStyles = makeStyles((theme) =>
 )
 
 const UsersCard = ({ users, setRefresh }) => {
-  const [isLoading, setIsLoading] = useState(false)
   const classes = useStyles()
 
   return (
     <Paper className={classes.paper}>
       <Typography variant='h4' color='textPrimary' align='left' gutterBottom>
         All Users{' '}
-        <RefreshIcon
-          className={isLoading ? classes.rotateIcon : ''}
-          style={{ cursor: 'pointer' }}
-          onClick={() => {
-            setRefresh((prev) => !prev)
-            setIsLoading(true)
-            setTimeout(() => {
-              setIsLoading(false)
-            }, 1200)
-          }}
-        />
       </Typography>
       <Typography variant='body1' color='textSecondary' align='center' gutterBottom>
         Total Results: {users.length}

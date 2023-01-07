@@ -15,13 +15,12 @@ import Modal from '@material-ui/core/Modal'
 import TextField from '@material-ui/core/TextField'
 import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined'
 import CancelIcon from '@material-ui/icons/Cancel'
-import RefreshIcon from '@material-ui/icons/Refresh'
 import LinkIcon from '@material-ui/icons/Link'
 import EditIcon from '@material-ui/icons/Edit'
 
 import appStore from '../store/AppStore'
 import {
-  getAllResumes,
+  getAllResumesLive,
   getAllRolesLive,
   getAllStatusesLive,
   addRole,
@@ -78,8 +77,6 @@ export const useStyles = makeStyles((theme) =>
 )
 
 const ResumesCard = () => {
-  const [isLoading, setIsLoading] = useState(false)
-  const [refresh, setRefresh] = useState(false)
   const [roles, setRoles] = useState({})
   const [statuses, setStatuses] = useState({})
   const [resumes, setResumes] = useState([])
@@ -260,9 +257,8 @@ const ResumesCard = () => {
   }, [])
 
   useEffect(() => {
-    setIsLoading(true)
-    getAllResumes()
-      .then((snapshot) => {
+    const unsubscribeResumeData = getAllResumesLive(
+      (snapshot) => {
         setResumes(
           snapshot.docs
             .map((doc) => {
@@ -273,14 +269,17 @@ const ResumesCard = () => {
             })
             .sort((a, b) => b.createdAt - a.createdAt)
         )
-        setIsLoading(false)
-      })
-      .catch((err) => {
+      },
+      (err) => {
         console.log(err)
-        showToast('Error fetching resumes', 'error')
-        setIsLoading(false)
-      })
-  }, [refresh])
+        showToast('Error Fetching Resumes', 'error')
+      }
+    )
+
+    return () => {
+      unsubscribeResumeData()
+    }
+  }, [])
 
   const onEditComplete = useCallback(
     ({ value, columnId, rowId }) => {
@@ -308,17 +307,6 @@ const ResumesCard = () => {
         <Paper className={classes.paper}>
           <Typography variant='h4' color='textPrimary' align='left' gutterBottom>
             Résumés{' '}
-            <RefreshIcon
-              className={isLoading ? classes.rotateIcon : ''}
-              style={{ cursor: 'pointer' }}
-              onClick={() => {
-                setRefresh((prev) => !prev)
-                setIsLoading(true)
-                setTimeout(() => {
-                  setIsLoading(false)
-                }, 1200)
-              }}
-            />
             <Button
               style={{ float: 'right' }}
               onClick={exportCSV}
