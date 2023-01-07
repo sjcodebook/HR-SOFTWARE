@@ -8,12 +8,12 @@ const Configs = {
   Production: {
     Env: 'Production',
     FirebaseConfig: {
-      apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-      authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-      projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-      storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-      messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGE_SENDER_ID,
-      appId: import.meta.env.VITE_FIREBASE_APP_ID,
+      apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+      authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+      projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+      storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+      messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGE_SENDER_ID,
+      appId: process.env.REACT_APP_FIREBASE_APP_ID,
     },
     FirebaseFunctionUrl: '/api',
     uiConfig: {
@@ -41,12 +41,12 @@ const Configs = {
   Staging: {
     Env: 'Staging',
     FirebaseConfig: {
-      apiKey: import.meta.env.VITE_DEV_FIREBASE_API_KEY,
-      authDomain: import.meta.env.VITE_DEV_FIREBASE_AUTH_DOMAIN,
-      projectId: import.meta.env.VITE_DEV_FIREBASE_PROJECT_ID,
-      storageBucket: import.meta.env.VITE_DEV_FIREBASE_STORAGE_BUCKET,
-      messagingSenderId: import.meta.env.VITE_DEV_FIREBASE_MESSAGE_SENDER_ID,
-      appId: import.meta.env.VITE_DEV_FIREBASE_APP_ID,
+      apiKey: process.env.REACT_APP_DEV_FIREBASE_API_KEY,
+      authDomain: process.env.REACT_APP_DEV_FIREBASE_AUTH_DOMAIN,
+      projectId: process.env.REACT_APP_DEV_FIREBASE_PROJECT_ID,
+      storageBucket: process.env.REACT_APP_DEV_FIREBASE_STORAGE_BUCKET,
+      messagingSenderId: process.env.REACT_APP_DEV_FIREBASE_MESSAGE_SENDER_ID,
+      appId: process.env.REACT_APP_DEV_FIREBASE_APP_ID,
     },
     FirebaseFunctionUrl: '/api',
     uiConfig: {
@@ -74,12 +74,12 @@ const Configs = {
   Local: {
     Env: 'Local',
     FirebaseConfig: {
-      apiKey: import.meta.env.VITE_DEV_FIREBASE_API_KEY,
-      authDomain: import.meta.env.VITE_DEV_FIREBASE_AUTH_DOMAIN,
-      projectId: import.meta.env.VITE_DEV_FIREBASE_PROJECT_ID,
-      storageBucket: import.meta.env.VITE_DEV_FIREBASE_STORAGE_BUCKET,
-      messagingSenderId: import.meta.env.VITE_DEV_FIREBASE_MESSAGE_SENDER_ID,
-      appId: import.meta.env.VITE_DEV_FIREBASE_APP_ID,
+      apiKey: process.env.REACT_APP_DEV_FIREBASE_API_KEY,
+      authDomain: process.env.REACT_APP_DEV_FIREBASE_AUTH_DOMAIN,
+      projectId: process.env.REACT_APP_DEV_FIREBASE_PROJECT_ID,
+      storageBucket: process.env.REACT_APP_DEV_FIREBASE_STORAGE_BUCKET,
+      messagingSenderId: process.env.REACT_APP_DEV_FIREBASE_MESSAGE_SENDER_ID,
+      appId: process.env.REACT_APP_DEV_FIREBASE_APP_ID,
     },
     FirebaseFunctionUrl: 'http://localhost:5001/hr-software-33bf5/us-central1',
     uiConfig: {
@@ -107,10 +107,10 @@ const Configs = {
 }
 
 let Config
-if (import.meta.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development') {
   Config = Configs.Local
   console.log(Config.Env + ' Environment')
-} else if (window.location.hostname === 'crm.x.com' && import.meta.env.NODE_ENV === 'production') {
+} else if (window.location.hostname === 'crm.x.com' && process.env.NODE_ENV === 'production') {
   Config = Configs.Production
   // Do not console.log
 } else {

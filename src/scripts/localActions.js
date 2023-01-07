@@ -2,12 +2,9 @@ import prettyMilliseconds from 'pretty-ms'
 import Resizer from 'react-image-file-resizer'
 import * as EmailValidator from 'email-validator'
 import { toast } from 'react-toastify'
-import * as dayjs from 'dayjs'
 import { StripChar } from 'stripchar'
 import { removeStopwords } from 'stopword'
 import phone from 'phone'
-
-import { Constants } from './constants'
 
 export const showToast = (msg = '', mode = 'success') => {
   if (mode === 'error') {
