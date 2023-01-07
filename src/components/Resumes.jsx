@@ -28,6 +28,8 @@ import {
   removeRole,
   removeStatus,
   editResumeData,
+  editResumeRole,
+  editResumeStatus,
 } from '../scripts/remoteActions'
 import { showToast, getContrastYIQ, convertToKey } from '../scripts/localActions'
 
@@ -342,10 +344,18 @@ const ResumesCard = () => {
             />
           </Paper>
           {showRoleEditModal && (
-            <RoleEditModal onClose={() => setShowRoleEditModal(false)} roles={roles} />
+            <RoleEditModal
+              resumes={resumes}
+              onClose={() => setShowRoleEditModal(false)}
+              roles={roles}
+            />
           )}
           {showStatusEditModal && (
-            <StatusEditModal onClose={() => setShowStatusEditModal(false)} statuses={statuses} />
+            <StatusEditModal
+              resumes={resumes}
+              onClose={() => setShowStatusEditModal(false)}
+              statuses={statuses}
+            />
           )}
         </Paper>
       )}
@@ -367,7 +377,7 @@ const getModalStyle = () => {
 
 const DEFAULT_COLOR = '#ffc723'
 
-const RoleEditModal = ({ onClose, roles }) => {
+const RoleEditModal = ({ resumes, onClose, roles }) => {
   const classes = useStyles()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
@@ -388,11 +398,30 @@ const RoleEditModal = ({ onClose, roles }) => {
       })
   }
 
-  const handleRemoveRole = (roleId) => {
-    removeRole(roleId).catch((err) => {
-      console.error(err)
-      showToast('Error Removing Role', 'error')
-    })
+  const handleRemoveRole = (roleId, roleKey) => {
+    const _removeRole = () => {
+      removeRole(roleId).catch((err) => {
+        console.error(err)
+        showToast('Error Removing Role', 'error')
+      })
+    }
+    const resumesWithRole = Object.values(resumes).filter((resume) => resume.role === roleKey)
+    if (resumesWithRole.length > 0) {
+      const confirm = window.confirm(
+        `Are you sure you want to remove this role? ${resumesWithRole.length} resume(s) role(s) will be updated`
+      )
+      if (confirm) {
+        _removeRole()
+        resumesWithRole.forEach((resume) => {
+          editResumeRole(resume.id, null).catch((err) => {
+            console.log(err)
+            showToast('Error Updating Resume Role', 'error')
+          })
+        })
+      }
+    } else {
+      _removeRole()
+    }
   }
 
   return (
@@ -462,7 +491,7 @@ const RoleEditModal = ({ onClose, roles }) => {
                                   top: '50%',
                                   transform: 'translate(0,-50%)',
                                 }}
-                                onClick={() => handleRemoveRole(role.id)}
+                                onClick={() => handleRemoveRole(role.id, role.roleKey)}
                               />
                             </div>
                           ))}
@@ -508,7 +537,7 @@ const RoleEditModal = ({ onClose, roles }) => {
   )
 }
 
-const StatusEditModal = ({ onClose, statuses }) => {
+const StatusEditModal = ({ resumes, onClose, statuses }) => {
   const classes = useStyles()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
@@ -533,11 +562,30 @@ const StatusEditModal = ({ onClose, statuses }) => {
       })
   }
 
-  const handleRemoveStatus = (statusId) => {
-    removeStatus(statusId).catch((err) => {
-      console.error(err)
-      showToast('Error Removing Status', 'error')
-    })
+  const handleRemoveStatus = (statusId, statusKey) => {
+    const _removeStatus = () => {
+      removeStatus(statusId).catch((err) => {
+        console.error(err)
+        showToast('Error Removing Status', 'error')
+      })
+    }
+    const resumesWithStatus = Object.values(resumes).filter((resume) => resume.status === statusKey)
+    if (resumesWithStatus.length > 0) {
+      const confirm = window.confirm(
+        `Are you sure you want to remove this status? ${resumesWithStatus.length} resume(s) Status(es) will be updated`
+      )
+      if (confirm) {
+        _removeStatus()
+        resumesWithStatus.forEach((resume) => {
+          editResumeStatus(resume.id, null).catch((err) => {
+            console.log(err)
+            showToast('Error Updating Resume Status', 'error')
+          })
+        })
+      }
+    } else {
+      _removeStatus()
+    }
   }
 
   return (
@@ -607,7 +655,7 @@ const StatusEditModal = ({ onClose, statuses }) => {
                                   top: '50%',
                                   transform: 'translate(0,-50%)',
                                 }}
-                                onClick={() => handleRemoveStatus(status.id)}
+                                onClick={() => handleRemoveStatus(status.id, status.statusKey)}
                               />
                             </div>
                           ))}
