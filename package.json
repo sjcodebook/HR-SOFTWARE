@@ -7,6 +7,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "serve": "firebase serve -p 5002 -P default --only hosting",
     "deploy-staging": "firebase deploy -P default --only hosting,firestore:rules,firestore:indexes,storage:rules",
     "deploy-prod": "firebase deploy -P prod --only hosting,firestore:rules,firestore:indexes,storage:rules"
   },
